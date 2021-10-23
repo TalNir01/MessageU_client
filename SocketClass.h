@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <boost/asio.hpp>
 #include <string>
@@ -18,12 +19,16 @@ public:
 	SocketClass();
 
 private:
-	std::string ip;
+	std::string address;
 	std::string port;
+	
+	/*
+	boost::asio::io_context io_context;
+	tcp::socket client_sock_conn(io_context);
+	tcp::resolver resolver(io_context);
+	*/
 
-	//boost::asio::io_context io_context;
-	//tcp::socket* client_sock_conn;
-	//tcp::resolver resolver;
+	tcp::socket* client_sock_conn_pointer;
 
 	void printing_Stuff(int i);
 

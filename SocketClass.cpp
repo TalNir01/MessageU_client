@@ -6,7 +6,7 @@ SocketClass::SocketClass()
 		Constructor for SocketClass, creating the connection, Constructor for first time log in.
 	*/
 	std::cout << "[LOG] Hello World From SocketClass Constructor " << std::endl;
-	this->ip = "";
+	this->address = "";
 	this->port = "";
 	this->read_server_info();
 
@@ -14,10 +14,14 @@ SocketClass::SocketClass()
 	boost::asio::io_context io_context;
 	tcp::socket client_sock_conn(io_context);
 	tcp::resolver resolver(io_context);
-
-	this->
-	// this->client_sock_conn(this->io_context);
-
+	
+	// Connect to server.
+	boost::asio::connect(client_sock_conn, resolver.resolve(this->address, this->port));
+	
+	// make the connection an Object proprtie
+	this->client_sock_conn_pointer = &client_sock_conn;
+	
+	//
 
 }
 
@@ -38,7 +42,7 @@ void SocketClass::read_server_info()
 		char tmp;
 		while ((tmp = fgetc(server_info_file)) != ':' and tmp != EOF) 
 		{
-			this->ip += tmp; // add char to ip until reaching ':'
+			this->address += tmp; // add char to ip until reaching ':'
 		}
 		while ((tmp = fgetc(server_info_file)) != EOF) 
 		{
