@@ -24,9 +24,21 @@
     <ClCompile Include="SocketClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="handleUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Request.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SocketClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Request.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handleUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
