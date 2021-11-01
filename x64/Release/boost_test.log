@@ -1,17 +1,35 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (boost_test.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  boost_test.cpp
+  Request.cpp
+  Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
+  - add -D_WIN32_WINNT=0x0601 to the compiler command line; or
+  - add _WIN32_WINNT=0x0601 to your project's Preprocessor Definitions.
+  Assuming _WIN32_WINNT=0x0601 (i.e. Windows 7 target).
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(6,2): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(11,7): warning C4101: 'tmp': unreferenced local variable
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(86,7): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(89,7): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(92,7): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(115,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(117,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(119,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(133,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(141,8): error C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(142,8): error C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(187,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(231,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(232,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(322,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(324,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(333,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(417,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(419,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(504,15): error C2039: 'service_50_type_3': is not a member of 'Request'
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.h(12): message : see declaration of 'Request'
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(514,15): error C2039: 'service_52_type_1': is not a member of 'Request'
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.h(12): message : see declaration of 'Request'
   SocketClass.cpp
   Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
   - add -D_WIN32_WINNT=0x0601 to the compiler command line; or
   - add _WIN32_WINNT=0x0601 to your project's Preprocessor Definitions.
   Assuming _WIN32_WINNT=0x0601 (i.e. Windows 7 target).
-  Source.cpp
-  Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
-  - add -D_WIN32_WINNT=0x0601 to the compiler command line; or
-  - add _WIN32_WINNT=0x0601 to your project's Preprocessor Definitions.
-  Assuming _WIN32_WINNT=0x0601 (i.e. Windows 7 target).
-  Generating code
-  Previous IPDB not found, fall back to full compilation.
-  All 326 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Finished generating code
-  boost_test.vcxproj -> C:\Users\talni\Desktop\projects and testing\boost_test\x64\Release\MessageU_client.exe
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\SocketClass.cpp(37,21): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.

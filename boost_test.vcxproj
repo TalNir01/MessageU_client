@@ -142,12 +142,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="boost_test.cpp" />
+    <ClCompile Include="client_class.cpp" />
     <ClCompile Include="handleUI.cpp" />
     <ClCompile Include="Request.cpp" />
     <ClCompile Include="SocketClass.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="client_class.h" />
     <ClInclude Include="handleUI.h" />
     <ClInclude Include="Request.h" />
     <ClInclude Include="SocketClass.h" />
