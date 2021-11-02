@@ -3,64 +3,97 @@
 Request::Request(tcp::socket* conn_pointer)
 {
 	this->req_socket_conn_pointer = conn_pointer;
-	strcpy(this->Version, "1");
+	this->req_header.Version = "1";
+	strcpy_s(this->Version, 1, "1");
 
+	this->old_user = false;
 
-	std::string reqCode;
-	std::cin >> reqCode;
-	char tmp[NAME_BUFFER_LEANGTH];
-
-
-	/*
-	// input validity
-	if (reqCode.length() > BUFFER_LEANGTH) 
-	{
-		exit(1);
-	}
-	for (int i = 0; i < reqCode.length(); i++) 
-	{
-		if (isdigit(reqCode[i]) == false) 
-		{
-			exit(1);
-		}
-	}
-
-	strcpy(tmp, reqCode.c_str());
-	this->Code = atoi(tmp);
-	*/
 
 	if (!this->getformerloginproprites()) 
 	{
-		//pass		 
+		// meaning that the client is new and must login
+		std::cout << "[LOG] the user is new. " << std::endl;
+		// generate keys
+
 	}
-	 
+	else 
+	{
+		std::cout << "[LOG] the user is OLD. We have your data." << std::endl;
+	}
 	
-	
-
-
 }
 
-
+/*	Sending the Header */
 bool Request::send_header()
 {
 	try 
 	{
 
-		boost::asio::write(*(this->req_socket_conn_pointer), boost::asio::buffer(this->Client_ID, 16));
-		boost::asio::write(*(this->req_socket_conn_pointer), boost::asio::buffer(this->Version, 1));
-		boost::asio::write(*(this->req_socket_conn_pointer), boost::asio::buffer(this->Code, 2));
-		boost::asio::write(*(this->req_socket_conn_pointer), boost::asio::buffer(this->Payload_str_size, 4));
+		boost::asio::write(*(this->req_socket_conn_pointer), boost::asio::buffer(this->req_header.Client_ID, 16));
+		boost::asio::write(*(this->req_socket_conn_pointer), boost::asio::buffer(this->req_header.Version, 1));
+		boost::asio::write(*(this->req_socket_conn_pointer), boost::asio::buffer(this->req_header.Code, 2));
+		boost::asio::write(*(this->req_socket_conn_pointer), boost::asio::buffer(this->req_header.payload_size, 4));
+		
+		std::cout << "[LOG] send the header." << std::endl;
 
 		return true;
 	}
 	catch (std::exception& e)
 	{
-		std::cerr << "[LOG] Error at sending section -> soket error: " << e.what() << std::endl;
+		std::cerr << "[LOG] Error at sending header -> soket error: " << e.what() << std::endl;
 		return false;
 	}
 
 	
 }
+
+
+/*	Reading the Header */
+int Request::read_header()
+{
+	size_t lang;
+	int response_payload_size = 0;
+
+	try
+	{
+
+		lang = boost::asio::read(*(this->req_socket_conn_pointer), boost::asio::buffer(this->header_response.Version, 1));
+		
+		if (!lang)
+		{
+			std::cerr << "[LOG] recive error accured " << std::endl;
+		}
+
+		lang = boost::asio::read(*(this->req_socket_conn_pointer), boost::asio::buffer(this->header_response.Code, 2));
+		
+		if (!lang)
+		{
+			std::cerr << "[LOG] recive error accured " << std::endl;
+		}
+		this->tmp_code = atoi(this->header_response.Code);
+
+
+		response_payload_size = boost::asio::read(*(this->req_socket_conn_pointer), boost::asio::buffer(this->header_response.payload_size, 4));
+
+		if (response_payload_size == 0)
+		{
+			std::cerr << "[LOG] recive error accured " << std::endl;
+		}
+
+		std::cout << "[LOG] read the header." << std::endl;
+
+		return true;
+	}
+	catch (std::exception& e)
+	{
+		std::cerr << "[LOG] Error at sending header -> soket error: " << e.what() << std::endl;
+		return false;
+	}
+
+	return response_payload_size;
+
+}
+
 
 char * Request::ret_client_id(std::string name)
 {
@@ -70,26 +103,39 @@ char * Request::ret_client_id(std::string name)
 	return NULL;
 }
 
+
 bool Request::getformerloginproprites()
 {
+	/*
+	  cheking in me.info if users was already defined.
+	*/
+	std::string client_name_tmp;
 	std::string str_uuid;
 	std::string private_key_str;
+
+
 	std::ifstream inf{ "me.info" };
 	if (!inf) 
 	{
-		std::cout << "[LOG] User dont exsits [couldn't find me.info] " << std::endl;
+		std::cout << "[LOG] User dont exsits [couldn't find me.info therefore it's empty] " << std::endl;
 		this->old_user = false;
 		return false;
 	}
 	
-	std::getline(inf, this->str_client_name);
-	std::strcpy(this->client_name, this->str_client_name.c_str());
 
+	// add tests to make sure all data is intact
+	std::getline(inf, client_name_tmp);
+	strcpy_s(this->client_name, NAME_BUFFER_LEANGTH, client_name_tmp.c_str());
+	
 	std::getline(inf, str_uuid);
-	std::strcpy(this->Client_ID, str_uuid.c_str());
+	strcpy_s(this->Client_ID, UUID_LEANGTH, str_uuid.c_str());
 
 	std::getline(inf, private_key_str);
-	std::strcpy(this->private_key, private_key_str.c_str());
+	strcpy_s(this->private_key, KEY_BUFFER_LEANGTH, private_key_str.c_str());
+
+	strcpy_s(this->req_header.Client_ID, UUID_LEANGTH, this->Client_ID);
+
+	
 
 
 	this->old_user = true;
@@ -102,6 +148,11 @@ bool Request::getformerloginproprites()
 
 bool Request::service_10_code_1000() // service 10 regestration
 {
+	
+	payload_1000 service_10;
+	payload_2000 response_2000;
+	
+
 	if (this->old_user) 
 	{
 		std::cout << "User already exsits, can't register again. " << std::endl;
@@ -112,36 +163,37 @@ bool Request::service_10_code_1000() // service 10 regestration
 	try 
 	{
 
-		std::strcpy(this->Code, "1000");
+		strcpy_s(this->req_header.Code, 2, "1000");
 
-		std::strcpy(this->Client_ID, "0000000000000000");
+		strcpy_s(this->req_header.Client_ID, "0");
 
-		std::strcpy(this->private_key, this->get_private_key());
+		strcpy_s(service_10.Public_key, KEY_BUFFER_LEANGTH, this->get_private_key());
 
-		std::cout << "Enter your user name: ";
+		std::cout << "Enter your user-name: ";
 
 		std::cin.getline(this->client_name, NAME_BUFFER_LEANGTH);
-		std::cout << "" << std::endl;
+		std::cout << "Got it, trying to register..." << std::endl;
 
-		std::cout << "Send the request" << std::endl;
+		std::cout << "registering... " << std::endl;
+
+		strcpy_s(service_10.Name, NAME_BUFFER_LEANGTH, this->client_name);
 
 		// Payload size
+		int req_size_tmp = KEY_BUFFER_LEANGTH + NAME_BUFFER_LEANGTH;
+		std::string load_size_tmp = std::to_string(req_size_tmp);
 		
-		this->Payload_size = 256 + 160;
-		std::string load_size_tmp = std::to_string(this->Payload_size);
-		//char Payload_str_size[4];
-		std::strcpy(this->Payload_str_size, load_size_tmp.c_str());
+		strcpy_s(this->req_header.payload_size, 5, load_size_tmp.c_str());
 		
+		// sending the header(req_header)
 		if (!this->send_header())
 		{
 			return false;
 		}
 		
-		char payload[416];
-		std::strcat(payload, this->client_name);
-		std::strcat(payload, this->public_key);
+		
 
-		boost::asio::write(*(this->req_socket_conn_pointer), boost::asio::buffer(payload, 416));
+		boost::asio::write(*(this->req_socket_conn_pointer), boost::asio::buffer(service_10.Name, NAME_BUFFER_LEANGTH));
+		boost::asio::write(*(this->req_socket_conn_pointer), boost::asio::buffer(service_10.Public_key, KEY_BUFFER_LEANGTH));
 
 	
 	}
@@ -151,42 +203,27 @@ bool Request::service_10_code_1000() // service 10 regestration
 		return false;
 	}
 
+	//	payload_2000 response_2000;
 
+
+	// reciveing response from the server.
 	try // 2000 response code
 	{
-		char serverV[2];
-		char response_code[3];
-		char response_payload_size[5];
+		int length_of_payload = 0;
 		size_t leng;
-		leng = boost::asio::read(*(this->req_socket_conn_pointer), boost::asio::buffer(serverV, 1));
-		
 
-		leng = boost::asio::read(*(this->req_socket_conn_pointer), boost::asio::buffer(response_code, 2));
 
-		if (response_code != "2000") 
+		length_of_payload = this->read_header();
+		if (this->header_response.Code != "2000") 
 		{
-			std::cout << "server responded with an error " << std::endl;
+			std::cerr << "[LOG] Error, got worng response code. " << std::endl;
 			return false;
+		}
+
+		leng = boost::asio::read(*(this->req_socket_conn_pointer), boost::asio::buffer(response_2000.Client_ID, 16));
+
+		strcpy_s(this->req_header.Client_ID, 16, response_2000.Client_ID);
 		
-		}
-
-		leng = boost::asio::read(*(this->req_socket_conn_pointer), boost::asio::buffer(response_payload_size, 4));
-
-		const int resleng = atoi(response_payload_size);
-		if (resleng == 0) 
-		{
-			if (response_payload_size != "0")
-				return false;
-		}
-
-		char *res_payload;
-
-		res_payload = (char*)malloc(resleng*sizeof(char));
-
-		leng = boost::asio::read(*(this->req_socket_conn_pointer), boost::asio::buffer(res_payload, resleng));
-		std::strcpy(this->Client_ID, res_payload);
-
-		free(res_payload);
 
 		std::ofstream outf{ "me.info" };
 
@@ -414,7 +451,7 @@ bool Request::service_40_code_1004() // ask for message list
 
 	try
 	{
-		std::strcpy_s(this->Code, 5, "1004");
+		std::strcpy(this->Code, "1004");
 
 		std::strcpy(this->Payload_str_size, "0");
 
@@ -493,11 +530,6 @@ bool Request::service_40_code_1004() // ask for message list
 
 bool Request::service_50_code_1003(int type) // send message. 50 - regular msg; 51 - ask for symmetric key; 52 - send symmetric key
 {
-
-
-
-
-
 
 }
 
