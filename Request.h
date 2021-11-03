@@ -3,27 +3,46 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <iterator>
 #include <fstream>
 #include <cstring>
+#include <vector>
 
 #include "client_class.h"
 #include "SocketClass.h"
 
 
-
+#define CODE_LEANGTH_BUFFER 2
 #define NAME_BUFFER_LEANGTH 255
 #define UUID_LEANGTH 16
 #define KEY_BUFFER_LEANGTH 160
+#define PAYLOAD_SIZE_BUFFER 5
+
+typedef char uuid_t[16];
+typedef char msg_uuid_t[4];
+
+
+typedef struct response_header {
+	char Version[2];
+	char Code[3];
+	char payload_size[5];
+} response_header_class;
+
+
+
 
 class Request
 {
 private:
 	int Payload_size : 32;
 	//std::string payload;
-	typedef char uuid_t[16];
-	typedef char msg_uuid_t[4];
-	unsigned short tmp_code;
+	
+	SocketClass* connection;
 
+
+	unsigned short int_code;
+
+	//std::map <uuid_t, std::string> client_list;
 
 	char Payload_str_size[4];
 	char client_name[NAME_BUFFER_LEANGTH];
@@ -32,37 +51,8 @@ private:
 	char Version[2];
 	char Code[3];
 
-	std::map<std::string, std::string> client_list;
-
-
-	uuid_t Client_ID;
-
-	char* get_private_key();
-
-	bool setloginproprties();
-
-	bool getformerloginproprites();
-
-	tcp::socket* req_socket_conn_pointer;
-
-	bool send_header();
-
-	int read_header();
-
-
-
-	std::string get_decode_payload(const char* response_encrypted_payload);
-
-	char* ret_client_id(std::string name);
-
-
-	bool service_51_type_2(); // request getting symmetric key
-
-	bool service_50_type_3();
-
-	bool service_52_type_1();
-
-
+	//std::map<std::string, std::string> client_list;
+	//start
 	// request
 
 	struct reqest_header {
@@ -75,7 +65,7 @@ private:
 	struct payload_1000  // regestration payload
 	{
 		char Name[NAME_BUFFER_LEANGTH];
-		char Public_key[PUBLIC_KEY_BUFFER_LEANGTH]; // client(self) public key
+		char Public_key[KEY_BUFFER_LEANGTH]; // client(self) public key
 	};
 
 	struct paypayload_1001 { // client list payload
@@ -102,12 +92,6 @@ private:
 
 	// response
 
-	struct response_header {
-		char Version[2];
-		char Code[3];
-		char payload_size[5];
-	};
-
 	struct payload_2000  // regestration success response
 	{
 		uuid_t Client_ID; // client new id
@@ -118,11 +102,11 @@ private:
 		uuid_t Client_ID; // client id
 		char Client_Name[NAME_BUFFER_LEANGTH]; // client name length
 	};
-	
+
 	struct payload_2002 // returning a public key
 	{
 		uuid_t Client_ID;
-		char Public_Key[PUBLIC_KEY_BUFFER_LEANGTH];
+		char Public_Key[KEY_BUFFER_LEANGTH];
 	};
 
 	struct payload_2003 // message was sent to client(saved at server)
@@ -140,10 +124,44 @@ private:
 		std::string Content_str;
 	};
 
+	struct another_client_info // recieve a pulled msg
+	{
+		uuid_t Client_ID; // sender
+		char Public_Key[KEY_BUFFER_LEANGTH];
+		char Client_Name[NAME_BUFFER_LEANGTH]; // client name length
+		char symmetric_key[KEY_BUFFER_LEANGTH];
+	};
+
+	// end
+	uuid_t Client_ID;
+
+	char* get_private_key();
+
+	bool setloginproprties();
+
+	bool getformerloginproprites();
+
+	tcp::socket* req_socket_conn_pointer;
+
+	std::string get_decode_payload(const char* response_encrypted_payload);
+
+	char* ret_client_id(std::string name);
+
+	bool service_51_type_2(); // request getting symmetric key
+
+	bool service_50_type_3();
+
+	bool service_52_type_1();
+
 	reqest_header req_header;
 
-	response_header header_response;
+	response_header_class header_response;
 
+	bool send_header();
+
+	response_header_class read_header();
+
+	std::vector<another_client_info> client_list; // a client list that holds all the data
 
 public:
 	Request(tcp::socket* conn_pointer);

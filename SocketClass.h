@@ -18,18 +18,18 @@ class SocketClass
 public:
 	SocketClass();
 
+	bool send(const char* data_to_send, const int len);
+	std::string read(const int len);
+
+
+
 private:
 	std::string address;
 	std::string port;
 	
-	/*
-	boost::asio::io_context io_context;
-	tcp::socket client_sock_conn(io_context);
-	tcp::resolver resolver(io_context);
-	*/
-
-	tcp::socket* client_sock_conn_pointer;
-
+	tcp::socket * socket;
+	
+	
 	void printing_Stuff(int i);
 
 	void read_server_info();

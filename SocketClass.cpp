@@ -12,18 +12,50 @@ SocketClass::SocketClass()
 
 	// Init boost connection
 	boost::asio::io_context io_context;
+	
 	tcp::socket client_sock_conn(io_context);
+
 	tcp::resolver resolver(io_context);
-	
+	this->socket = &client_sock_conn;
+
 	// Connect to server.
-	boost::asio::connect(client_sock_conn, resolver.resolve(this->address, this->port));
+	boost::asio::connect(*this->socket, resolver.resolve(this->address, this->port));
 	
-	// make the connection an Object proprtie
-	this->client_sock_conn_pointer = &client_sock_conn;
 	
-	//
+}
+
+bool SocketClass::send(const char* data_to_send, const int len)
+{
+	try {
+		boost::asio::write(*this->socket, boost::asio::buffer(data_to_send, len));
+		return true;
+	}
+	catch (std::exception& e)
+	{
+		std::cerr << "[LOG] Error at sending section -> soket error: " << e.what() << std::endl;
+		return false;
+	}
 
 }
+
+std::string SocketClass::read(const int len)
+{
+	
+	//char recive_buffer[len];
+	std::string data;
+	size_t length_of_read;
+	try {
+		length_of_read = boost::asio::read(*this->socket, boost::asio::buffer(data, len));
+		return data;
+	}
+	catch (std::exception& e)
+	{
+		std::cerr << "[LOG] Error at sending section -> soket error: " << e.what() << std::endl;
+		return data;
+	}
+
+}
+
 
 void SocketClass::printing_Stuff(int i) 
 {
