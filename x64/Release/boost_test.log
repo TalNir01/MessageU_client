@@ -6,14 +6,10 @@
   Assuming _WIN32_WINNT=0x0601 (i.e. Windows 7 target).
 C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.h(16,1): warning C4005: 'NAME_BUFFER_LEANGTH': macro redefinition
 C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\client_class.h(9): message : see previous definition of 'NAME_BUFFER_LEANGTH'
-C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.h(164,35): error C2371: 'Request::client_list': redefinition; different basic types
-C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.h(45): message : see declaration of 'Request::client_list'
-C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(63,15): error C2374: 'tmp_header': redefinition; multiple initialization
-C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(60): message : see declaration of 'tmp_header'
-C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(68,15): error C2374: 'tmp_header': redefinition; multiple initialization
-C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(60): message : see declaration of 'tmp_header'
-C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(455,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(457,8): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(267,15): warning C4101: 'response_payload': unreferenced local variable
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(411,9): warning C4101: 'response_payload_size': unreferenced local variable
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(410,9): warning C4101: 'response_code': unreferenced local variable
+C:\Users\talni\Desktop\projects and testing\boost_test\boost_test\Request.cpp(409,9): warning C4101: 'serverV': unreferenced local variable
   SocketClass.cpp
   Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
   - add -D_WIN32_WINNT=0x0601 to the compiler command line; or

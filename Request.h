@@ -15,11 +15,14 @@
 #define CODE_LEANGTH_BUFFER 2
 #define NAME_BUFFER_LEANGTH 255
 #define UUID_LEANGTH 16
+#define MSG_ID_LEANGTH 4
+#define TYPE_MSG_BUFFER_LEANGTH 2
 #define KEY_BUFFER_LEANGTH 160
 #define PAYLOAD_SIZE_BUFFER 5
+#define MSG_SISE_BUFFER 5
 
-typedef char uuid_t[16];
-typedef char msg_uuid_t[4];
+typedef char uuid_t[UUID_LEANGTH];
+typedef char msg_uuid_t[MSG_ID_LEANGTH];
 
 
 typedef struct response_header {
@@ -80,8 +83,8 @@ private:
 	struct payload_1003 // sending a message to client[3 types]
 	{
 		uuid_t Client_ID; // id of dest client
-		char Message_Type; // type of msg 1 - ask for symetric key; 2 - send symmetric key
-		char Content_Size[4]; // !!!!!!!!!!!!!!!! think again of size
+		char Message_Type[TYPE_MSG_BUFFER_LEANGTH];
+		char Message_Size[MSG_SISE_BUFFER];
 		std::string Message_Content_str;
 	};
 
@@ -119,8 +122,8 @@ private:
 	{
 		uuid_t Client_ID; // sender
 		msg_uuid_t Message_ID;
-		char Message_Type;
-		char Message_Size[4];
+		char Message_Type[TYPE_MSG_BUFFER_LEANGTH];
+		char Message_Size[MSG_SISE_BUFFER];
 		std::string Content_str;
 	};
 
@@ -143,15 +146,9 @@ private:
 
 	tcp::socket* req_socket_conn_pointer;
 
-	std::string get_decode_payload(const char* response_encrypted_payload);
+	std::string get_decode_payload(std::string encoded_data, uuid_t id);
 
 	char* ret_client_id(std::string name);
-
-	bool service_51_type_2(); // request getting symmetric key
-
-	bool service_50_type_3();
-
-	bool service_52_type_1();
 
 	reqest_header req_header;
 
@@ -162,6 +159,27 @@ private:
 	response_header_class read_header();
 
 	std::vector<another_client_info> client_list; // a client list that holds all the data
+
+	std::string get_name_by_id(uuid_t id);
+
+	std::string get_symmetric_key();
+
+	std::string get_public_key();
+
+	std::string encode(std::string data, uuid_t id);//symetric
+
+	std::string decode(std::string data, uuid_t id);//symetric
+
+	std::string encode_by_public_key(std::string data, uuid_t id);
+
+	std::string decode_by_private_key(std::string data, uuid_t id);
+
+
+
+
+
+
+
 
 public:
 	Request(tcp::socket* conn_pointer);
@@ -178,5 +196,10 @@ public:
 
 	bool service_50_code_1003(int type);
 
-};
+	bool service_51_type_1_code_1003(); // request getting symmetric key
 
+	bool service_50_type_3_code_1003();
+
+	bool service_52_type_2_code_1003();
+
+};

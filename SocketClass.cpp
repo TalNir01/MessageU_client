@@ -84,3 +84,24 @@ void SocketClass::read_server_info()
 
 
 }
+
+/*std::ifstream inf{ "me.info" };
+	if (!inf) 
+	{
+		std::cout << "[LOG] User dont exsits [couldn't find me.info therefore it's empty] " << std::endl;
+		this->old_user = false;
+		return false;
+	}
+	
+
+	// add tests to make sure all data is intact
+	std::getline(inf, client_name_tmp);
+	strcpy_s(this->client_name, NAME_BUFFER_LEANGTH, client_name_tmp.c_str());
+	
+	std::getline(inf, str_uuid);
+	strcpy_s(this->Client_ID, UUID_LEANGTH, str_uuid.c_str());
+
+	std::getline(inf, private_key_str);
+	strcpy_s(this->private_key, KEY_BUFFER_LEANGTH, private_key_str.c_str());
+
+	strcpy_s(this->req_header.Client_ID, UUID_LEANGTH, this->Client_ID);*/
